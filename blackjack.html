@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  	<!-- Compiled and minified CSS -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+  	<link rel="stylesheet" href="index.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style type="text/css">
+        button {
+            background-color:blue;
+        }
+    </style>
+  </head>
+
+  <body>
+	  <nav>
+	    <div class="nav-wrapper container">
+	      <a href="index.html" class="brand-logo">TreMundos World</a>
+	      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+	      <ul class="right hide-on-med-and-down">
+	        <li><a href="#">Blackjack</a></li>
+	        <li><a href="bodega.html">Bodega</a></li>
+	        <li><a href="calculator.html">Calculator</a></li>
+	        <li><a href="super-calculator.html">Super Calculator</a></li>
+	      </ul>
+	      <ul class="side-nav" id="mobile-demo">
+	        <li><a href="blackjack.html">Blackjack</a></li>
+	        <li><a href="bodega.html">Bodega</a></li>
+	        <li><a href="calculator.html">Calculator</a></li>
+	        <li><a href="super-calculator.html">Super Calculator</a></li>
+	      </ul>
+	    </div>
+	  </nav>
+
+	  <div class="row" id="home">
+	  	<h1>BlackJack</h1>
+	  	<p class="lead">A simple game of blackjack!</p>
+	  </div>
+
+	  <div class="container" id="black">
+		  <div class="row">
+		  	<div class="col s6">
+		  		<h3 id="deal">Dealer: <span></span></h3>
+		  	</div>
+		  	<div class="col s6">
+		  		<h3 id="play">Your Hand: <span></span></h3>
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col s3">
+		  		<button class="waves-effect waves-light btn" onclick="start()">Start</a>
+		  	</div>
+		  	<div class="col s3">
+		  		<button id="hit" class="waves-effect waves-light btn" onclick="hit()">Hit</a>
+		  	</div>
+		  	<div class="col s3">
+		  		<button id="stay" class="waves-effect waves-light btn" onclick="stay()">Stay</a>
+		  	</div>
+		  	<div class="col s3">
+		  		<p>Raise Bet: <input id="bet" value="0" type="number"></p>
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<h3>Total Earnings: $<span id="earnings">0</span></h3>
+		  </div>
+		  <div class="row">
+		  	<h3>Result: <span id="result"></span></h3>
+		  </div>
+	  </div>
+
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		$(".button-collapse").sideNav();
+    	})
+
+    	//Start the game.
+    	//Deck must be created with cards with values between 1-10, J, Q, K, A.
+    	//Cards "J, Q, K" have a value of 10. "A" can either be 1 or 11.
+    	//Each player has to start with two cards. So two cards are randomly chosen from the deck.
+    	//Players have the option to hit with a card or stay while in the remainder of game.
+    	//Players have to hit 21 or at least close to it. Whoever is closer or touches it wins. Players bust if they pass 21 or lose if is the least closest to 21.
+    	//User can adjust their bet later on.
+    	//After the game, users earnings will determine depending on the outcome of the game. If they win, they earn money, if lost, players will lose money. If tied, nothing happens.
+    	//End game results are determined depending whoever won or lost.
+
+    	//Deck
+    	var deck = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+    	var dealer = [];
+    	var player = [];
+
+    	document.getElementById("hit").disabled = true;
+    	document.getElementById("stay").disabled = true;  
+
+    	function start() {
+    		document.getElementById("hit").disabled = false; 
+    		document.getElementById("stay").disabled = false; 
+    		dealer = [];
+    		player = [];
+
+    		dealer.push(deck[parseInt(Math.random()*13)]);
+    		dealer.push(deck[parseInt(Math.random()*13)]);
+    		player.push(deck[parseInt(Math.random()*13)]);
+    		player.push(deck[parseInt(Math.random()*13)]);
+
+    		document.getElementById("deal").innerHTML = "Dealer: " + dealer;
+    		document.getElementById("play").innerHTML = "Player: " + player;
+
+    		document.getElementById("result").innerHTML = "";
+    	};
+
+    	function hit() {
+    		player.push(deck[parseInt(Math.random()*13)]);	
+    		document.getElementById("play").innerHTML = "Player: " + player;
+
+    		//Check the player array of cards.
+    		//Check what each card value is and depending on the card, add whatever value given towards the total.  
+    		//If players card is 21 then they win.
+    		//If players card passes 21 then they bust.
+    		//Start Over.
+
+    		sum = 0;
+
+    		for(var i in player) {
+    			if (player[i] == "A") {
+    				//If card happens to be "A", add 11 to the sum.
+    				//If the sum is over 11, make "A"'s value equal 1.
+    				if (sum < 11) {
+    					sum = sum + 11;
+    				} else {
+    					sum = sum + 1;
+    				}
+    			} else if (player[i] == "J" || player[i] == "Q" || player[i] == "K") {
+    				sum = sum + 10;
+    			} else {
+    				sum = sum + parseInt(player[i]);
+    			}
+
+    			if (sum == 21) {
+    				document.getElementById("result").innerHTML = "Player Blackjack!";
+    				document.getElementById("hit").disabled = true;
+    				document.getElementById("stay").disabled = true;
+    				document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) + parseInt(document.getElementById("bet").value);
+    			} else if (sum > 21) {
+    				document.getElementById("result").innerHTML = "Player Bust! Dealer wins!";
+    				document.getElementById("hit").disabled = true; 
+    				document.getElementById("stay").disabled = true;
+    				document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) - parseInt(document.getElementById("bet").value);
+    			}
+    		}
+
+            dealer.push(deck[parseInt(Math.random()*13)]);  
+            document.getElementById("deal").innerHTML = "Dealer: " + dealer;
+
+            sum2 = 0;
+
+            for(var i in dealer) {
+                if (dealer[i] == "A") {
+                    //If card happens to be "A", add 11 to the sum.
+                    //If the sum is over 11, make "A"'s value equal 1.
+                    if (sum2 < 11) {
+                        sum2 = sum2 + 11;
+                    } else {
+                        sum2 = sum2 + 1;
+                    }
+                } else if (dealer[i] == "J" || dealer[i] == "Q" || dealer[i] == "K") {
+                    sum2 = sum2 + 10;
+                } else {
+                    sum2 = sum2 + parseInt(dealer[i]);
+                }
+
+                if (sum2 == 21) {
+                    document.getElementById("result").innerHTML = "Dealer Blackjack!";
+                    document.getElementById("hit").disabled = true;
+                    document.getElementById("stay").disabled = true;
+                    document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) - parseInt(document.getElementById("bet").value);
+                } else if (sum2 > 21) {
+                    document.getElementById("result").innerHTML = "Dealer Bust! Player win!";
+                    document.getElementById("hit").disabled = true; 
+                    document.getElementById("stay").disabled = true;
+                    document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) + parseInt(document.getElementById("bet").value);
+                }
+            }
+
+            if(sum > 21 && sum2 > 21) {
+                document.getElementById("result").innerHTML = "Both bust, draw.";
+                document.getElementById("hit").disabled = true; 
+                document.getElementById("stay").disabled = true;
+            } else if (sum == 21 && sum2 == 21) {
+                document.getElementById("result").innerHTML = "Both blackjack, draw.";
+                document.getElementById("hit").disabled = true; 
+                document.getElementById("stay").disabled = true;
+            }  else if (sum == 21 && sum2 > 21) {
+                document.getElementById("result").innerHTML = "Player blackjack, dealer bust.";
+                document.getElementById("hit").disabled = true; 
+                document.getElementById("stay").disabled = true;
+                document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) + parseInt(document.getElementById("bet").value) + parseInt(document.getElementById("bet").value);
+            } else if (sum2 == 21 && sum > 21) {
+                document.getElementById("result").innerHTML = "Dealer blackjack! player bust.";
+                document.getElementById("hit").disabled = true; 
+                document.getElementById("stay").disabled = true;
+                document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) - parseInt(document.getElementById("bet").value) - parseInt(document.getElementById("bet").value);
+            }
+    	}
+
+    	function stay() {
+    		//Check the value of whatever sum the player and dealer has.
+    		//Compare the dealers hands to the players hands.
+    		//Whoever is closest to 21 wins.
+    		var sum1 = 0;
+
+    		for(var i in dealer) {
+    			if (dealer[i] == "A") {
+    				//If card happens to be "A", add 11 to the sum.
+    				//If the sum is over 11, make "A"'s value equal 1.
+    				if (sum1 < 11) {
+    					sum1 = sum1 + 11;
+    				} else {
+    					sum1 = sum1 + 1;
+    				}
+    			} else if (dealer[i] == "J" || dealer[i] == "Q" || dealer[i] == "K") {
+    				sum1 = sum1 + 10;
+    			} else {
+    				sum1 = sum1 + parseInt(dealer[i]);
+    			}	
+    		}
+
+    		var sum2 = 0;
+
+    		for(var i in player) {
+    			if (player[i] == "A") {
+    				//If card happens to be "A", add 11 to the sum.
+    				//If the sum is over 11, make "A"'s value equal 1.
+    				if (sum2 < 11) {
+    					sum2 = sum2 + 11;
+    				} else {
+    					sum2 = sum2 + 1;
+    				}
+    			} else if (player[i] == "J" || player[i] == "Q" || player[i] == "K") {
+    				sum2 = sum2 + 10;
+    			} else {
+    				sum2 = sum2 + parseInt(player[i]);
+    			}
+    		}
+
+    		if (sum2 > sum1) {
+    			document.getElementById("result").innerHTML="Player wins!";
+    			document.getElementById("hit").disabled = true; 
+    			document.getElementById("stay").disabled = true;
+    			document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) + parseInt(document.getElementById("bet").value);
+    		} else if (sum1 > sum2){
+				document.getElementById("result").innerHTML="Dealer wins!";
+    			document.getElementById("hit").disabled = true; 
+    			document.getElementById("stay").disabled = true;
+    			document.getElementById("earnings").innerHTML = parseInt(document.getElementById("earnings").innerHTML) - parseInt(document.getElementById("bet").value);
+    		} else {
+                document.getElementById("result").innerHTML="Draw.";
+                document.getElementById("hit").disabled = true; 
+                document.getElementById("stay").disabled = true;
+            }
+    	}
+
+    </script>
+
+  </body>
+</html>

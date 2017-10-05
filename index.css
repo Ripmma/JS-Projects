@@ -1,0 +1,21 @@
+body {
+	background-color:black;
+	color:white;
+}
+
+nav {
+	background-color: red;
+}
+
+#home {
+	text-align:center;
+}
+
+#black {
+	text-align:center;
+}
+
+.waves-effect {
+	position:relative;
+	top:40px;
+}
