@@ -11,6 +11,29 @@
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style type="text/css">
+    	.lower {
+    		position:relative;
+    		top:3em;
+    	}
+
+    	input {
+    		position:relative;
+    		top:30px;
+    	}
+
+    	.position {
+    		position:relative;
+    		bottom:15px;
+    	}
+
+    	#center {
+    		text-align:center;
+    		position:relative;
+    		top: 5em;
+    	}
+    </style>
   </head>
 
   <body>
@@ -20,7 +43,7 @@
 	      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 	      <ul class="right hide-on-med-and-down">
 	        <li><a href="blackjack.html">Blackjack</a></li>
-	        <li><a href="bodega.html">Bodega</a></li>
+	        <li><a href="deliQueue.html">Deli Queue</a></li>
 	        <li><a href="#">Calculator</a></li>
 	        <li><a href="super-calculator.html">Super Calculator</a></li>
 	      </ul>
@@ -38,19 +61,28 @@
 	  	<p class="lead">Oh... you actually thought this was a rad calculator but its just a simple form of calculator.. nothing special.</p>
 	  </div>
 
-	  <div class="container">
+	  <div class="container lower">
 	  	<div class="row">
 	  		<div class="col s3">
-	  			<input type="number" id="num1">
+	  			<input type="number" value="0" id="num1">
 	  		</div>
 			  <div class="input-field col s3">
-			    <select>
-			      <option value="+">+</option>
-			      <option value="-">/</option>
-			      <option value="*">*</option>
-			      <option value="/">/</option>
+			    <select class="position" id="mySelect">
+			      <option value="plus">+</option>
+			      <option value="minus">-</option>
+			      <option value="multiply">*</option>
+			      <option value="divide">/</option>
 			    </select>
 			  </div>
+	  		<div class="col s3">
+	  			<input type="number" value="0" id="num2">
+	  		</div>
+	  		<div class="col s3">
+	  			<button type="submit" class="waves-effect waves-light btn" onclick="answer()">Enter</button>
+	  		</div>
+	  	</div>
+	  	<div class="row" id="center">
+	  		<h3>The answer is: <span id="answer"></span></h3>
 	  	</div>
 	  </div>
 
@@ -60,6 +92,37 @@
     	$(document).ready(function(){
     		$(".button-collapse").sideNav();
     	})
+		$(document).ready(function() {
+		    $('select').material_select();
+	    });
+
+	    //To make a simple calculator, we need to have a sum equal to 0.
+	    //Tags will then have to be set equal to their values as integers.
+	    //Depending on the select options, the two input numbers will be equal to the sum with whatever select option is used.
+	    function answer() {
+	   	    var sum = 0,
+	    		num1 = parseInt(document.getElementById('num1').value),
+	    		num2 = parseInt(document.getElementById('num2').value),
+	    		symbols = document.getElementById("mySelect").value;
+
+	    	if (symbols == "plus") {
+	    		sum = num1 + num2;
+	    		document.getElementById("answer").innerHTML = sum;
+	    		console.log(num1, num2);
+	    	} else if (symbols == "minus") {
+	    		sum = num1 - num2;
+	    		document.getElementById("answer").innerHTML = sum;
+	    		console.log(num1, num2);
+	    	} else if (symbols == "multiply") {
+	    		sum = sum * num1 * num2;
+	    		document.getElementById("answer").innerHTML = sum;
+	    		console.log(num1, num2);
+	    	} else if (symbols == "divide") {
+	    		sum = sum / num1 / num2;
+	    		document.getElementById("answer").innerHTML = sum;
+	    		console.log(num1, num2);
+	    	}
+	    }
     </script>
   </body>
 </html>
