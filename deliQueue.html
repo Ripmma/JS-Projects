@@ -16,7 +16,7 @@
   <body>
 	  <nav>
 	    <div class="nav-wrapper container">
-	      <a href="index.html" class="brand-logo">TreMundos World</a>
+	      <a href="index.html" class="brand-logo">Tre's World</a>
 	      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 	      <ul class="right hide-on-med-and-down">
 	        <li><a href="blackjack.html">Blackjack</a></li>
@@ -51,13 +51,13 @@
 	  				<button class="waves-effect waves-light btn" type="submit" onclick="add()">Added Customer</button>
 	  			</div>
 	  			<div class="row">
-	  				<button class="waves-effect waves-light btn" type="submit" onclick="served()">Customer Served</button>
+	  				<button id="custServed" class="waves-effect waves-light btn" type="submit" onclick="served()">Customer Served</button>
 	  			</div>
 	  		</div>
 	  	</div>
 	  	<div class="row">
 	  		<h4 id="custom"></h4>
-	  		<table>
+	  		<table id="myTable">
 	  			<thead>
 	  				<tr>
 	  					<th>Position</th>
@@ -68,11 +68,6 @@
 	  			<tbody>
 	  				<tr>
 	  					<td id="hide" colspan="3">No customers in queue.</td>
-	  				</tr>
-	  				<tr>
-	  					<td id="position"></td>
-	  					<td id="name"></td>
-	  					<td id="order"></td>
 	  				</tr>
 	  			</tbody>
 	  		</table>
@@ -88,17 +83,62 @@
 
     	//Create an array of objects containing the persons name and order.
 
-    	var arr = [
-    		{name: document.getElementById("name").value},
-    		{order: document.getElementById("order").value}
-    	];
+    	var arr = [];
+    	document.getElementById("custServed").disabled=true;
 
     	function add() {
     		// When clicked, add users input value towards array.
     		document.getElementById("hide").style.display="none";
-    		arr.push({
-    			name: document.getElementById("customerName").innerHTML
+    		document.getElementById("custServed").disabled=false;
+
+    		arr.push({	
+    			name: document.getElementById("customerName").value,
+    			order: document.getElementById("orderPlaced").value
     		});
+    		for(var i = 0; i < arr.length; i++) {
+    			var integer = parseInt(i);
+	    		var position = i + 1;
+	    		var name = arr[i].name;
+	    		var order = arr[i].order;
+    		}
+
+    		var table = document.getElementById("myTable");
+    		var row = table.insertRow();
+    		var cell1 = row.insertCell();
+    		var cell2 = row.insertCell();
+    		var cell3 = row.insertCell();
+    		cell1.innerHTML = position;
+    		cell2.innerHTML = name;
+    		cell3.innerHTML = order;
+
+    		for(var i = 2; i < table.rows.length; i++) {
+	    		var position = i - 1;
+	    		table.rows[i].children[0].innerHTML = position;
+
+    		}
+
+    		document.getElementById("custom").innerHTML = name + " is now in queue";
+    	}
+
+    	function served() {
+    		// When clicked, customer gets served and that customer gets removed from quere so the next one up comes next. 
+
+			var table = document.getElementById("myTable");
+			table.deleteRow(2);
+
+    		for(var i = 2; i < table.rows.length; i++) {
+	    		var position = i - 1;
+	    		table.rows[i].children[0].innerHTML = position;
+    		}
+
+    		var name = arr.shift().name;
+    		document.getElementById("custom").innerHTML = name + " has been served.";
+
+	    	if (table.rows.length == 2) {
+	    		document.getElementById("hide").style.display="block";
+	    		document.getElementById("custServed").disabled=true;
+	    	}
+
     	}
     </script>
   </body>

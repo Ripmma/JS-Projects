@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  	<!-- Compiled and minified CSS -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+  	<link rel="stylesheet" href="index.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <style type="text/css">
+
+		#small-width {
+			text-align:center;
+			width:23em;
+		}
+
+		#answer {
+			text-align:right;
+		}
+
+		table, th, td {
+		 border: 3px solid white;
+		 text-align:center;
+		}
+
+		td:hover {
+			background-color:grey;
+		}
+
+		td:active {
+			background-color:blue;
+		}
+
+    </style>
+
+  </head>
+
+  <body>
+	  <nav>
+	    <div class="nav-wrapper container">
+	      <a href="index.html" class="brand-logo">Tre's World</a>
+	      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+	      <ul class="right hide-on-med-and-down">
+	        <li><a href="blackjack.html">Blackjack</a></li>
+	        <li><a href="deliQueue.html">Deli Queue</a></li>
+	        <li><a href="calculator.html">Calculator</a></li>
+	        <li><a href="#">Super Calculator</a></li>
+	      </ul>
+	      <ul class="side-nav" id="mobile-demo">
+	        <li><a href="blackjack.html">Blackjack</a></li>
+	        <li><a href="deliQueue.html">Deli Queue</a></li>
+	        <li><a href="calculator.html">Calculator</a></li>
+	        <li><a href="#">Super Calculator</a></li>
+	      </ul>
+	    </div>
+	  </nav>
+
+	  <div class="row" id="home">
+	  	<h1>Super Original Calculator</h1>
+	  	<p class="lead">The simple calculator was boring. Lets bring things up a little!</p>
+	  </div>
+
+	  <div id="small-width" class="container">
+	  	<table>
+	  		<thead>
+	  			<tr>
+	  				<th colspan="4"><h4 id="answer">0<h4></th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr>
+	  				<td colspan="3" onclick="button(this)">C</td>
+	  				<td onclick="button(this)">/</td>
+	  			</tr>
+	  			<tr>
+	  				<td onclick="button(this)">7</td>
+	  				<td onclick="button(this)">8</td>
+	  				<td onclick="button(this)">9</td>
+	  				<td onclick="button(this)">*</td>
+	  			</tr>
+	  			<tr>
+	  				<td onclick="button(this)">4</td>
+	  				<td onclick="button(this)">5</td>
+	  				<td onclick="button(this)">6</td>
+	  				<td onclick="button(this)">-</td>
+	  			</tr>
+	  			<tr>
+	  				<td onclick="button(this)">1</td>
+	  				<td onclick="button(this)">2</td>
+	  				<td onclick="button(this)">3</td>
+	  				<td onclick="button(this)">+</td>
+	  			</tr>
+	  			<tr>
+	  				<td colspan="3" onclick="button(this)">0</td>
+	  				<td onclick="button(this)">=</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	  </div>
+
+
+
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		$(".button-collapse").sideNav();
+    	})
+
+    	var answer = document.getElementById('answer');
+
+    	function button(inner){
+    		var clicked = inner.innerHTML;
+
+    		if (clicked == "=") {
+    			answer.innerHTML = eval(answer.innerHTML);
+    		} else if(clicked == "C") {
+    			answer.innerHTML = "0";
+    		} else {
+    			if (answer.innerHTML == "0") {
+    				answer.innerHTML = clicked;
+    			} else {
+    				answer.innerHTML += clicked;
+    			}
+    		}
+    	}
+
+    </script>
+  </body>
+</html>
